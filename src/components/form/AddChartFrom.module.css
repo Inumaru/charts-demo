@@ -1,0 +1,23 @@
+.chartForm {
+
+}
+
+.chartForm > div {
+    margin: 5px 0;
+    text-align: left;
+}
+
+.chartForm select,
+.chartForm button,
+.chartForm input {
+    width: 100%;
+    padding: 5px;
+}
+
+.chartForm input {
+    width: calc(100% - 14px);
+}
+
+.chartForm input[type="checkbox"] {
+    width: 16px;
+}

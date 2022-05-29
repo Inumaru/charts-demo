@@ -1,0 +1,14 @@
+.mainLayout {
+  display: flex;
+  height: 100vh;
+}
+
+.mainLayoutColumnLeft{
+  width: 200px;
+  background-color: rgba(0, 0, 0, .1);
+}
+
+.mainLayoutColumnMain {
+  background-color: rgba(0, 0, 0, .01);
+  width: calc(100% - 200px);
+}

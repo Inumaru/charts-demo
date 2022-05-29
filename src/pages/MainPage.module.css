@@ -1,0 +1,9 @@
+.mainPage {
+    display: flex;
+    height: 100vh;
+}
+
+.mainPage > div {
+    width: 50%;
+    text-align: center;
+}
