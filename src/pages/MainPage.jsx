@@ -3,13 +3,13 @@ import classes from "./MainPage.module.css"
 import {useDispatch, useSelector} from "react-redux";
 import {getCharts, storeAddChart, storeRemoveChart, storeSetChartSide} from "../store/ChartSlice";
 import WidgetColumn from "../components/dashboard/WidgetColumn";
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 const SIDE_LEFT = 'left';
 const SIDE_RIGHT = 'right';
 
 const MainPage = () => {
-    const [dragChart, setDragChart] = useState({})
-
     const dispatch = useDispatch()
     const charts = useSelector(getCharts)
 
@@ -27,24 +27,22 @@ const MainPage = () => {
 
     return (
         <div className={classes.mainPage}>
-            <WidgetColumn
-                charts={charts}
-                side={SIDE_LEFT}
-                addChart={addChart}
-                removeChart={removeChart}
-                setSide={setSide}
-                dragChart={dragChart}
-                setDragChart={setDragChart}
-            />
-            <WidgetColumn
-                charts={charts}
-                side={SIDE_RIGHT}
-                addChart={addChart}
-                removeChart={removeChart}
-                setSide={setSide}
-                dragChart={dragChart}
-                setDragChart={setDragChart}
-            />
+            <DndProvider backend={HTML5Backend}>
+                <WidgetColumn
+                    charts={charts}
+                    side={SIDE_LEFT}
+                    addChart={addChart}
+                    removeChart={removeChart}
+                    setSide={setSide}
+                />
+                <WidgetColumn
+                    charts={charts}
+                    side={SIDE_RIGHT}
+                    addChart={addChart}
+                    removeChart={removeChart}
+                    setSide={setSide}
+                />
+            </DndProvider>
         </div>
     );
 };

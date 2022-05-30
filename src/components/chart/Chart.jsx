@@ -4,9 +4,20 @@ import Highcharts from 'highcharts/highcharts';
 import HighchartsReact from "highcharts-react-official";
 import {CHART_DATA_SOURCE_BROWSERS, useDataset} from "../../hook/useCharts";
 import drilldown from 'highcharts/modules/drilldown'
+import {useDrag} from "react-dnd";
 
 const Chart = ({chart, removeChart, ...props}) => {
     drilldown(Highcharts)
+
+    const [{ isDragging }, drag] = useDrag(() => ({
+        type: "chart",
+        item: { ...chart, name: chart.id },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+            handlerId: monitor.getHandlerId(),
+        }),
+    }))
+    const opacity = isDragging ? 0.4 : 1
 
     const data = useDataset(chart.dataSource, chart.withDrilldown)
 
@@ -53,7 +64,12 @@ const Chart = ({chart, removeChart, ...props}) => {
     }
 
     return (
-        <div {...props} className={classes.chart}>
+        <div
+            {...props}
+            className={classes.chart}
+            ref={drag}
+            style={{opacity}}
+        >
             <div className={classes.chartTitleLine}>
                 <div className={classes.title}>{chart.title}</div>
                 <button onClick={() => removeChart(chart.id)}>X</button>

@@ -4,9 +4,27 @@ import classes from "./WidgetColumn.module.css"
 import Modal from "../modal/Modal";
 import AddChartForm from "../form/AddChartForm";
 import Chart from "../chart/Chart";
+import {useDrop} from "react-dnd";
 
-const WidgetColumn = ({charts, side, addChart, removeChart, setSide, dragChart, setDragChart}) => {
+const WidgetColumn = ({charts, side, addChart, removeChart, setSide}) => {
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [{ canDrop, isOver }, drop] = useDrop(() => ({
+        accept: "chart",
+        drop: (item) => {
+            setSide(item.id, side)
+        },
+        collect: (monitor) => ({
+            isOver: monitor.isOver(),
+            canDrop: monitor.canDrop(),
+        }),
+    }))
+    const isActive = canDrop && isOver
+    let backgroundColor = 'white'
+    if (isActive) {
+        backgroundColor = 'darkgreen'
+    } else if (canDrop) {
+        backgroundColor = 'darkkhaki'
+    }
 
     const sideCharts = useCharts(charts, side)
 
@@ -15,45 +33,17 @@ const WidgetColumn = ({charts, side, addChart, removeChart, setSide, dragChart, 
         setIsModalVisible(false)
     }
 
-    const onDragStart = (e, chart) => {
-        setDragChart(chart)
-    }
-
-    const onDragEnd = (e) => {
-    }
-
-    const onDragOver = (e) => {
-        e.preventDefault()
-    }
-
-    const onDrop = (e, chart) => {
-        e.preventDefault()
-        setSide(dragChart.id, side)
-    }
-
-    const onChartDrop = (e) => {
-        e.preventDefault()
-
-        setSide(dragChart.id, side)
-    }
-
     return (
         <div
             className={classes.widgetColumn}
-            onDragOver={(e) => onDragOver(e)}
-            onDrop={onChartDrop}
+            ref={drop}
+            style={{backgroundColor}}
         >
             <Modal visible={isModalVisible} setVisible={setIsModalVisible}>
                 <AddChartForm onAddChart={onAddChart} isVisible={isModalVisible}/>
             </Modal>
             {sideCharts.map(chart =>
                 <Chart
-                    draggable
-                    onDragStart={(e) => onDragStart(e, chart)}
-                    onDragLeave={(e) => onDragEnd(e)}
-                    onDragEnd={(e) => onDragEnd(e)}
-                    onDragOver={(e) => onDragOver(e)}
-                    onDrop={onDrop}
                     removeChart={removeChart}
                     key={chart.id}
                     chart={chart}
