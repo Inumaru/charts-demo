@@ -16,12 +16,10 @@ const WidgetColumn = ({charts, side, addChart, removeChart, setSide, dragChart, 
     }
 
     const onDragStart = (e, chart) => {
-        console.log('start', chart);
         setDragChart(chart)
     }
 
     const onDragEnd = (e) => {
-        console.log('DRAG END');
     }
 
     const onDragOver = (e) => {
@@ -35,7 +33,7 @@ const WidgetColumn = ({charts, side, addChart, removeChart, setSide, dragChart, 
 
     const onChartDrop = (e) => {
         e.preventDefault()
-        console.log('chartDrop', dragChart);
+
         setSide(dragChart.id, side)
     }
 
