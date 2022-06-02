@@ -19,14 +19,14 @@ const Chart = ({chart, removeChart, ...props}) => {
     }))
     const opacity = isDragging ? 0.4 : 1
 
-    const data = useDataset(chart.dataSource, chart.withDrilldown)
+    const data = useDataset(chart)
 
     const options = {
+        title: {
+            text: "",
+        },
         chart: {
             type: chart.type,
-        },
-        subtitle: {
-            text: 'Click on item to view data per year'
         },
         accessibility: {
             announceNewData: {

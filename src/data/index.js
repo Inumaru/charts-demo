@@ -153,3 +153,144 @@ export const browsersUsage = [
         "Safari": 3.6
     }
 ]
+
+export const foreignCompanies = {
+    title: "Top foreign companies in Russia 2020",
+    legendField: "name",
+    columnMapping: {
+        name: "Название",
+        type: "Тип",
+        revenue: "Выручка, в ₽ млдр",
+        percent: "Доля в общей выручке, в %",
+    },
+    columnSuffixes: {
+        revenue: "млдр ₽",
+        percent: "%",
+    },
+    allowedColumns: [
+        "revenue",
+        "percent",
+    ],
+    data: [
+        {
+            name: "Japan Tabacco International",
+            type: "Tabacco",
+            revenue: 311.8,
+            percent: 21.2,
+        },
+        {
+            name: "Leroy Merlin",
+            type: "Shop",
+            revenue: 347.2,
+            percent: 18.3,
+        },
+        {
+            name: "Philip Morris International",
+            type: "Tabacco",
+            revenue: 359.5,
+            percent: 17.3,
+        },
+        {
+            name: "Auchan",
+            type: "Shop",
+            revenue: 223,
+            percent: 11.5,
+        },
+        {
+            name: "Metro Cash & Carry",
+            type: "Shop",
+            revenue: 230.6,
+            percent: 10.1,
+        },
+        {
+            name: "Group Renault",
+            type: "Auto",
+            revenue: 310,
+            percent: 8.6,
+        },
+        {
+            name: "British American Tabacco",
+            type: "Tabacco",
+            revenue: 197,
+            percent: 7.3,
+        },
+        {
+            name: "IKEA",
+            type: "Shop",
+            revenue: 123,
+            percent: 7.3,
+        },
+        {
+            name: "Kia Motor Rus",
+            type: "Auto",
+            revenue: 221.3,
+            percent: 6.8,
+        },
+        {
+            name: "Mars",
+            type: "Food",
+            revenue: 140,
+            percent: 4.7,
+        },
+        {
+            name: "Pepsico",
+            type: "Food",
+            revenue: 252.4,
+            percent: 3.4,
+        },
+        {
+            name: "Hyundai Motor",
+            type: "Auto",
+            revenue: 176.3,
+            percent: 3.1,
+        },
+        {
+            name: "BMW",
+            type: "Auto",
+            revenue: 179.7,
+            percent: 2.4,
+        },
+        {
+            name: "Nestle",
+            type: "Food",
+            revenue: 138.4,
+            percent: 2,
+        },
+        {
+            name: "Samsung",
+            type: "Tech",
+            revenue: 246,
+            percent: 1.7,
+        },
+        {
+            name: "Toyota",
+            type: "Auto",
+            revenue: 263.9,
+            percent: 1.6,
+        },
+        {
+            name: "Mercedes Benz",
+            type: "Auto",
+            revenue: 191.8,
+            percent: 1.4,
+        },
+        {
+            name: "Apple",
+            type: "Tech",
+            revenue: 226.3,
+            percent: 1.3,
+        },
+        {
+            name: "Huawei",
+            type: "Tech",
+            revenue: 128,
+            percent: 1.2,
+        },
+        {
+            name: "Volkswagen Group",
+            type: "Auto",
+            revenue: 319.7,
+            percent: 1,
+        },
+    ]
+}

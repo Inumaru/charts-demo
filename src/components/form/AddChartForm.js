@@ -1,25 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import classes from "./AddChartFrom.module.css"
-import {
-    CHART_TYPE_PIE,
-    CHART_TYPE_COLUMN,
-} from "../chart/Chart";
-import {CHART_DATA_SOURCE_BROWSERS} from "../../hook/useCharts";
+import {CHART_TYPE_COLUMN, CHART_TYPE_PIE,} from "../chart/Chart";
+import {CHART_DATA_SOURCE_BROWSERS, CHART_DATA_SOURCE_FOREIGN_COMPANIES} from "../../hook/useCharts";
+import {useCheckbox, useInput} from "../../hook/useInput";
+import {foreignCompanies} from "../../data";
 
 const AddChartForm = ({onAddChart, isVisible}) => {
-    const [title, setTitle] = useState("")
-    const [type, setType] = useState("")
-    const [withDrilldown, setWithDrilldown] = useState(false)
-    const [dataSource, setDataSource] = useState("")
+    const title = useInput()
+    const type = useInput()
+    const dataSource = useInput()
+    const withDrilldown = useCheckbox()
+    const field = useInput()
 
     const onSubmit = (e) => {
         e.preventDefault()
 
         const newChart = {
-            title,
-            type,
-            dataSource,
-            withDrilldown,
+            title: title.value,
+            type: type.value,
+            dataSource: dataSource.value,
+            withDrilldown: withDrilldown.checked,
+            field: field.value,
             id: Date.now(),
         }
 
@@ -28,10 +29,11 @@ const AddChartForm = ({onAddChart, isVisible}) => {
 
     useEffect(() => {
         if (!isVisible) {
-            setTitle("")
-            setType("")
-            setDataSource("")
-            setWithDrilldown(false)
+            title.resetValue()
+            type.resetValue()
+            dataSource.resetValue()
+            withDrilldown.resetChecked()
+            field.resetValue()
         }
     }, [isVisible])
 
@@ -40,21 +42,35 @@ const AddChartForm = ({onAddChart, isVisible}) => {
             <div>
                 <input
                     type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={title.value}
+                    onChange={title.onChange}
                     placeholder="Title"
                     minLength="3"
                     required
                 />
             </div>
             <div>
-                <select required value={dataSource} onChange={(e) => setDataSource(e.target.value)}>
+                <select required value={dataSource.value} onChange={dataSource.onChange}>
                     <option value="">Select data source...</option>
                     <option value={CHART_DATA_SOURCE_BROWSERS}>Browsers usage</option>
+                    <option value={CHART_DATA_SOURCE_FOREIGN_COMPANIES}>Foreign companies revenue</option>
                 </select>
             </div>
+            {dataSource.value === CHART_DATA_SOURCE_FOREIGN_COMPANIES &&
+                <div>
+                    <select
+                        value={field.value}
+                        onChange={field.onChange}
+                    >
+                        <option value="">Select field...</option>
+                        {foreignCompanies.allowedColumns.map(field =>
+                            <option key={field} value={field}>{foreignCompanies.columnMapping[field]}</option>
+                        )}
+                    </select>
+                </div>
+            }
             <div>
-                <select required value={type} onChange={(e) => setType(e.target.value)}>
+                <select required value={type.value} onChange={type.onChange}>
                     <option value="">Select type...</option>
                     <option value={CHART_TYPE_COLUMN}>Column</option>
                     <option value={CHART_TYPE_PIE}>Pie</option>
@@ -64,8 +80,8 @@ const AddChartForm = ({onAddChart, isVisible}) => {
                 <label>
                     <input
                         type="checkbox"
-                        checked={withDrilldown}
-                        onChange={() => setWithDrilldown(!withDrilldown)}
+                        checked={withDrilldown.checked}
+                        onChange={withDrilldown.onChange}
                     />
                     <span>With Drilldown</span>
                 </label>
