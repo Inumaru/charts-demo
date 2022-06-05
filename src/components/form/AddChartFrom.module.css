@@ -21,3 +21,8 @@
 .chartForm input[type="checkbox"] {
     width: 16px;
 }
+
+.chartForm .error {
+    color: red;
+    font-size: .8em;
+}

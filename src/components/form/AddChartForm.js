@@ -2,25 +2,31 @@ import React, {useEffect} from 'react';
 import classes from "./AddChartFrom.module.css"
 import {CHART_TYPE_COLUMN, CHART_TYPE_PIE,} from "../chart/Chart";
 import {CHART_DATA_SOURCE_BROWSERS, CHART_DATA_SOURCE_FOREIGN_COMPANIES} from "../../hook/useCharts";
-import {useCheckbox, useInput} from "../../hook/useInput";
 import {foreignCompanies} from "../../data";
+import {useForm} from "react-hook-form";
 
 const AddChartForm = ({onAddChart, isVisible}) => {
-    const title = useInput()
-    const type = useInput()
-    const dataSource = useInput()
-    const withDrilldown = useCheckbox()
-    const field = useInput()
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
+        defaultValues: {
+            title: "",
+            type: "",
+            dataSource: "",
+            field: "",
+            withDrilldown: [],
+        }
+    })
 
-    const onSubmit = (e) => {
-        e.preventDefault()
+    const dataSource = watch('dataSource')
 
+    const titlePlaceholder = "Введите название"
+    const dataSourcePlaceholder = "Выберите источник данных"
+    const fieldPlaceholder = "Выберите поле для отображения"
+    const typePlaceholder = "Выберите тип отображения"
+
+    const onSubmit = (data) => {
         const newChart = {
-            title: title.value,
-            type: type.value,
-            dataSource: dataSource.value,
-            withDrilldown: withDrilldown.checked,
-            field: field.value,
+            ...data,
+            withDrilldown: data.dataSource.length !== 0,
             id: Date.now(),
         }
 
@@ -28,66 +34,77 @@ const AddChartForm = ({onAddChart, isVisible}) => {
     }
 
     useEffect(() => {
-        if (!isVisible) {
-            title.resetValue()
-            type.resetValue()
-            dataSource.resetValue()
-            withDrilldown.resetChecked()
-            field.resetValue()
-        }
+        reset()
     }, [isVisible])
 
     return (
-        <form className={classes.chartForm} onSubmit={onSubmit}>
+        <form className={classes.chartForm} onSubmit={handleSubmit(onSubmit)}>
             <div>
                 <input
                     type="text"
-                    value={title.value}
-                    onChange={title.onChange}
-                    placeholder="Title"
-                    minLength="3"
-                    required
+                    placeholder={titlePlaceholder}
+                    {...register("title", {
+                        required: titlePlaceholder,
+                        minLength: {
+                            value: 3,
+                            message: "Минимальная длина 3"
+                        }
+                    })}
                 />
             </div>
+            {errors.title &&
+                <div className={classes.error}>{errors.title.message}</div>
+            }
             <div>
-                <select required value={dataSource.value} onChange={dataSource.onChange}>
-                    <option value="">Select data source...</option>
+                <select
+                    {...register("dataSource", {required: dataSourcePlaceholder})}
+                >
+                    <option value="">{dataSourcePlaceholder}...</option>
                     <option value={CHART_DATA_SOURCE_BROWSERS}>Browsers usage</option>
                     <option value={CHART_DATA_SOURCE_FOREIGN_COMPANIES}>Foreign companies revenue</option>
                 </select>
             </div>
-            {dataSource.value === CHART_DATA_SOURCE_FOREIGN_COMPANIES &&
+            {errors.dataSource &&
+                <div className={classes.error}>{errors.dataSource.message}</div>
+            }
+            {dataSource === CHART_DATA_SOURCE_FOREIGN_COMPANIES &&
                 <div>
                     <select
-                        value={field.value}
-                        onChange={field.onChange}
+                        {...register("field", {required: fieldPlaceholder})}
                     >
-                        <option value="">Select field...</option>
+                        <option value="">{fieldPlaceholder}...</option>
                         {foreignCompanies.allowedColumns.map(field =>
                             <option key={field} value={field}>{foreignCompanies.columnMapping[field]}</option>
                         )}
                     </select>
                 </div>
             }
+            {dataSource === CHART_DATA_SOURCE_FOREIGN_COMPANIES && errors.field &&
+                <div className={classes.error}>{errors.field.message}</div>
+            }
             <div>
-                <select required value={type.value} onChange={type.onChange}>
-                    <option value="">Select type...</option>
+                <select
+                    {...register("type", {required: typePlaceholder})}
+                >
+                    <option value="">{typePlaceholder}...</option>
                     <option value={CHART_TYPE_COLUMN}>Column</option>
                     <option value={CHART_TYPE_PIE}>Pie</option>
                 </select>
             </div>
+            {errors.type &&
+                <div className={classes.error}>{errors.type.message}</div>
+            }
             <div>
                 <label>
                     <input
                         type="checkbox"
-                        checked={withDrilldown.checked}
-                        onChange={withDrilldown.onChange}
+                        {...register("withDrilldown")}
                     />
-                    <span>With Drilldown</span>
+                    <span>С проваливанием</span>
                 </label>
             </div>
             <div>
-                <button>Add chart</button>
+                <button>Добавить виджет</button>
             </div>
         </form>
     );
